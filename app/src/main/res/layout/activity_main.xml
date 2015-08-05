@@ -7,10 +7,13 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
+        android:id="@+id/friend_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:background="#f1f1f2"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <HorizontalScrollView
             android:id="@+id/horizontal_Scroll"
@@ -28,18 +31,61 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <EditText
-            android:id="@+id/search_text"
+        <ImageView
+            android:id="@+id/search_icon"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_search" />
+
+        <EditText
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_alignParentRight="true"
             android:layout_alignTop="@id/horizontal_Scroll"
             android:layout_marginTop="25dp"
             android:background="@android:color/white"
             android:drawableLeft="@android:drawable/ic_menu_search"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Search" />
+            android:text="Search"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/search_container"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#f1f1f2"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/cancel_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:text="Cancel" />
+
+        <SearchView
+            android:id="@+id/search_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/cancel_image"
+            android:layout_alignParentLeft="true"
+            android:background="@android:color/white"
+            android:focusable="false"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search" />
 
     </RelativeLayout>
 
