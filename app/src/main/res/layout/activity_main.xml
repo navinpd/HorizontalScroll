@@ -67,9 +67,10 @@
         <TextView
             android:id="@+id/cancel_image"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:gravity="center_vertical"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:text="Cancel" />
 
@@ -77,14 +78,15 @@
             android:id="@+id/search_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/cancel_image"
-            android:layout_alignParentLeft="true"
             android:background="@android:color/white"
             android:focusable="false"
             android:iconifiedByDefault="false"
+            android:paddingLeft="-15dp"
             android:queryHint="Search" />
 
     </RelativeLayout>
