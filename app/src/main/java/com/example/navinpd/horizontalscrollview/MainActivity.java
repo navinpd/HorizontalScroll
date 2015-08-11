@@ -1,12 +1,16 @@
 package com.example.navinpd.horizontalscrollview;
 
+import android.animation.Animator;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -15,6 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.ArrayList;
 
@@ -34,11 +41,13 @@ public class MainActivity extends ActionBarActivity {
     int oldWidth;
     ArrayList<View> viewContainer;
     Button addButton;
+    Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mHandler = new Handler();
         addButton = (Button) findViewById(R.id.add_button);
         linearContainer = (LinearLayout) findViewById(R.id.horizontal_linear);
         horizontalScroll = (HorizontalScrollView) findViewById(R.id.horizontal_Scroll);
@@ -90,19 +99,69 @@ public class MainActivity extends ActionBarActivity {
         searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                friendContainer.setVisibility(View.GONE);
-                searchContainer.setVisibility(View.VISIBLE);
+                animateViewHorizontally(friendContainer, searchContainer);
             }
         });
 
         searchCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                friendContainer.setVisibility(View.VISIBLE);
-                searchContainer.setVisibility(View.GONE);
+                animateViewHorizontally(searchContainer, friendContainer);
             }
         });
+    }
 
+    private void animateViewHorizontally(final View view1, final View view2) {
+        YoYo.with(Techniques.FadeOutLeft).delay(100)
+                .interpolate(new AccelerateInterpolator())
+                .withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
+                        view1.setVisibility(View.VISIBLE);
+                        view1.setAlpha(1);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                        view1.setAlpha(0);
+                        view1.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
+
+                    }
+                })
+                .playOn(view1);
+        YoYo.with(Techniques.FadeInRight).delay(100)
+                .interpolate(new AccelerateInterpolator())
+                .withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
+                        view2.setVisibility(View.VISIBLE);
+                        view2.setAlpha(0);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                        view2.setVisibility(View.VISIBLE);
+                        view2.setAlpha(1);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
+
+                    }
+                })
+                .playOn(view2);
     }
 
     private void fixPosition() {
@@ -119,39 +178,38 @@ public class MainActivity extends ActionBarActivity {
         horizontalScroll.measure(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         linearContainer.measure(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         int scrollWidth = horizontalScroll.getMeasuredWidth();
-        int lineaWidth = linearContainer.getMeasuredWidth();
+        int linearWidth = linearContainer.getMeasuredWidth();
         int mainWidth = getResources().getDisplayMetrics().widthPixels;
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) horizontalScroll.getLayoutParams();
         if (80 + scrollWidth > mainWidth) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    horizontalScroll.setScrollbarFadingEnabled(true);
+                }
+            }, 300);
+            horizontalScroll.setScrollbarFadingEnabled(false);
             params.width = oldWidth;
             horizontalScroll.setLayoutParams(params);
         } else {
+            horizontalScroll.setScrollbarFadingEnabled(true);
             params.width = scrollWidth;
             horizontalScroll.setLayoutParams(params);
             oldWidth = scrollWidth;
         }
 
-        Toast.makeText(this, "scrollWidth " + scrollWidth + " LinearWidth " + lineaWidth, Toast.LENGTH_LONG).show();
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
