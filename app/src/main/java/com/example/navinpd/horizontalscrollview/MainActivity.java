@@ -188,7 +188,7 @@ public class MainActivity extends ActionBarActivity {
                 public void run() {
                     horizontalScroll.setScrollbarFadingEnabled(true);
                 }
-            }, 300);
+            }, 100);
             horizontalScroll.setScrollbarFadingEnabled(false);
             params.width = oldWidth;
             horizontalScroll.setLayoutParams(params);
